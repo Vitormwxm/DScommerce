@@ -84,6 +84,7 @@ public class User {
         return orders;
     }
 
+    // propriedade client na entidade Order
     @OneToMany(mappedBy = "client")
     private List<Order> orders = new ArrayList<>();
 }
