@@ -15,7 +15,6 @@ public class Category {
     private Long id;
     private String name;
 
-    // relacionamento muitos par muitos
     @ManyToMany(mappedBy = "categories")
     private Set<Product> products = new HashSet<>();
 
