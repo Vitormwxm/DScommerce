@@ -1,9 +1,12 @@
 package com.vitormwxm.dscommece.controllers;
 
+import com.vitormwxm.dscommece.dto.ProductDTO;
 import com.vitormwxm.dscommece.entities.Product;
 import com.vitormwxm.dscommece.repository.ProductRepository;
+import com.vitormwxm.dscommece.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,12 +17,11 @@ import java.util.Optional;
 public class ProductController {
 
     @Autowired
-    private ProductRepository repository;
+    private ProductService service;
 
-    @GetMapping // informa que é uma requisição GET
-    public String teste() {
-        Optional<Product> result = repository.findById(1L);
-        Product product = result.get();
-        return product.getName();
+    @GetMapping(value = "/{id}") // informa que é uma requisição GET, que deve utilizar um id para o produto
+    public ProductDTO findById(@PathVariable Long id) { //PathVariable vai casar o caminho completo
+        ProductDTO dto = service.findById(id);
+        return dto;
     }
 }
