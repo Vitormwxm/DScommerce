@@ -4,9 +4,12 @@ import com.vitormwxm.dscommece.dto.ProductDTO;
 import com.vitormwxm.dscommece.entities.Product;
 import com.vitormwxm.dscommece.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,5 +25,11 @@ public class ProductService {
         ProductDTO dto = new ProductDTO(product.getId(), product.getName(), product.getDescription(), product.getPrice()
         , product.getImgUrl());
         return dto;
+    }
+
+    public Page<ProductDTO> findAll(Pageable pageable) {
+        Page<Product> product = productRepository.findAll(pageable);
+        return product.map(x -> new ProductDTO(x));
+                // product.stream().map(x -> new ProductDTO(x)).toList();
     }
 }
