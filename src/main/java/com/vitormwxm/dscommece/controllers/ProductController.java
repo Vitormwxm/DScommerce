@@ -49,5 +49,11 @@ public class ProductController {
         return ResponseEntity.ok(dto);
     }
 
+    @DeleteMapping(value = "/{id}") // informa que é uma requisição GET, que deve utilizar um id para o produto
+    public ResponseEntity<Void> delete(@PathVariable Long id) { //PathVariable vai casar o caminho completo
+        service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
 
 }
