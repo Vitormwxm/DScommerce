@@ -3,6 +3,7 @@ package com.vitormwxm.dscommece.service;
 import com.vitormwxm.dscommece.dto.ProductDTO;
 import com.vitormwxm.dscommece.entities.Product;
 import com.vitormwxm.dscommece.repository.ProductRepository;
+import com.vitormwxm.dscommece.service.exceptions.ResoucerNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,10 +21,10 @@ public class ProductService {
     // retorna uma DTO a partir do ID
     @Transactional(readOnly = true)
     public ProductDTO findById(Long id) {
-        Optional<Product> result = productRepository.findById(id);
-        Product product = result.get();
-        ProductDTO dto = new ProductDTO(product.getId(), product.getName(), product.getDescription(), product.getPrice()
-        , product.getImgUrl());
+
+        Product result = productRepository.findById(id).orElseThrow(() -> new ResoucerNotFoundException("Recurso não encontrado"));
+        ProductDTO dto = new ProductDTO(result.getId(), result.getName(), result.getDescription(), result.getPrice()
+        , result.getImgUrl());
         return dto;
     }
 
