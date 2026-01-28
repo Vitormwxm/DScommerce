@@ -43,5 +43,11 @@ public class ProductController {
         return ResponseEntity.created(uri).body(dto);
     }
 
+    @PutMapping(value = "/{id}") // informa que é uma requisição GET, que deve utilizar um id para o produto
+    public ResponseEntity<ProductDTO> update(@PathVariable Long id, @RequestBody ProductDTO productDTO) { //PathVariable vai casar o caminho completo
+        ProductDTO dto = service.update(id, productDTO);
+        return ResponseEntity.ok(dto);
+    }
+
 
 }
