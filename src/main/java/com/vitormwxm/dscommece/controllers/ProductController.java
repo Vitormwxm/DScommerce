@@ -7,8 +7,11 @@ import com.vitormwxm.dscommece.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 
@@ -20,9 +23,9 @@ public class ProductController {
     private ProductService service;
 
     @GetMapping(value = "/{id}") // informa que é uma requisição GET, que deve utilizar um id para o produto
-    public ProductDTO findById(@PathVariable Long id) { //PathVariable vai casar o caminho completo
+    public ResponseEntity<ProductDTO> findById(@PathVariable Long id) { //PathVariable vai casar o caminho completo
         ProductDTO dto = service.findById(id);
-        return dto;
+        return ResponseEntity.ok(dto);
     }
 
     @GetMapping// informa que é uma requisição GET, que deve utilizar um id para o produto
@@ -32,9 +35,12 @@ public class ProductController {
     }
 
     @PostMapping
-    public ProductDTO insert(@RequestBody ProductDTO productDTO) { //PathVariable vai casar o caminho completo
+    public ResponseEntity<ProductDTO> insert(@RequestBody ProductDTO productDTO) { //PathVariable vai casar o caminho completo
         ProductDTO dto = service.insert(productDTO);
-        return dto;
+
+        // boas práticas para retornar código 201
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
+        return ResponseEntity.created(uri).body(dto);
     }
 
 
