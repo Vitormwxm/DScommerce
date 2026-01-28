@@ -7,10 +7,7 @@ import com.vitormwxm.dscommece.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,4 +30,12 @@ public class ProductController {
         Page<ProductDTO> dto = service.findAll(pageable);
         return dto;
     }
+
+    @PostMapping
+    public ProductDTO insert(@RequestBody ProductDTO productDTO) { //PathVariable vai casar o caminho completo
+        ProductDTO dto = service.insert(productDTO);
+        return dto;
+    }
+
+
 }
