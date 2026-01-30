@@ -2,6 +2,7 @@ package com.vitormwxm.dscommece.controllers.handlers;
 
 
 import com.vitormwxm.dscommece.dto.CustomError;
+import com.vitormwxm.dscommece.service.exceptions.DatabaseException;
 import com.vitormwxm.dscommece.service.exceptions.ResoucerNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -19,4 +20,12 @@ public class ControllerExceptionHandler{
         CustomError err = new CustomError(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
+
+    @ExceptionHandler(DatabaseException.class)
+    public ResponseEntity<CustomError> resourceNotFound(DatabaseException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        CustomError err = new CustomError(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
 }
+

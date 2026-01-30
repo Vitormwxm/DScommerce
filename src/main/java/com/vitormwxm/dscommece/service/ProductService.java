@@ -3,11 +3,15 @@ package com.vitormwxm.dscommece.service;
 import com.vitormwxm.dscommece.dto.ProductDTO;
 import com.vitormwxm.dscommece.entities.Product;
 import com.vitormwxm.dscommece.repository.ProductRepository;
+import com.vitormwxm.dscommece.service.exceptions.DatabaseException;
 import com.vitormwxm.dscommece.service.exceptions.ResoucerNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -49,16 +53,30 @@ public class ProductService {
 
     @Transactional
     public ProductDTO update(Long id, ProductDTO productDTO) {
-        Product product = productRepository.getReferenceById(id);
-        copyDtoToEntity(productDTO, product);
 
-        product = productRepository.save(product);
-        return new ProductDTO(product);
+        try {
+            Product product = productRepository.getReferenceById(id);
+            copyDtoToEntity(productDTO, product);
+
+            product = productRepository.save(product);
+            return new ProductDTO(product);
+        } catch (EntityNotFoundException e) {
+            throw new ResoucerNotFoundException("Recurso não encontrado");
+        }
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void delete(Long id) {
-        productRepository.deleteById(id);
+        if(!productRepository.existsById(id)) {
+            throw new ResoucerNotFoundException("Recurso não encontrado");
+        }
+
+        try {
+            productRepository.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Falha de integridade referencial");
+        }
+
     }
 
     private void copyDtoToEntity(ProductDTO productDTO, Product product) {
