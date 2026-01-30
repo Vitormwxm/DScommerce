@@ -31,4 +31,6 @@ public class CustomError {
     public Integer getSatus() {
         return status;
     }
+
+
 }
