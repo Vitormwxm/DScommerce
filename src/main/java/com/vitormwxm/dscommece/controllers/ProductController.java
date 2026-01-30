@@ -4,6 +4,7 @@ import com.vitormwxm.dscommece.dto.ProductDTO;
 import com.vitormwxm.dscommece.entities.Product;
 import com.vitormwxm.dscommece.repository.ProductRepository;
 import com.vitormwxm.dscommece.service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +36,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductDTO> insert(@RequestBody ProductDTO productDTO) { //PathVariable vai casar o caminho completo
+    public ResponseEntity<ProductDTO> insert(@Valid @RequestBody ProductDTO productDTO) { //PathVariable vai casar o caminho completo
         ProductDTO dto = service.insert(productDTO);
 
         // boas práticas para retornar código 201
@@ -44,7 +45,7 @@ public class ProductController {
     }
 
     @PutMapping(value = "/{id}") // informa que é uma requisição GET, que deve utilizar um id para o produto
-    public ResponseEntity<ProductDTO> update(@PathVariable Long id, @RequestBody ProductDTO productDTO) { //PathVariable vai casar o caminho completo
+    public ResponseEntity<ProductDTO> update(@PathVariable Long id, @Valid @RequestBody ProductDTO productDTO) { //PathVariable vai casar o caminho completo
         ProductDTO dto = service.update(id, productDTO);
         return ResponseEntity.ok(dto);
     }
